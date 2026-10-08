@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{% if tag %}#{{ tag.name }} · {% endif %}{{ BLOG_TITLE }}{% endblock %}
+
+{% block content %}
+  {% if tag %}
+    <div class="tag-header">
+      <h1>Posts tagged <span>#{{ tag.name }}</span></h1>
+      <a href="{% url 'blog:post_list' %}">Clear filter ×</a>
+    </div>
+  {% endif %}
+
+  {% for post in page_obj %}
+    {% include "blog/_post_card.html" %}
+  {% empty %}
+    {% if tag %}
+      <p>No published posts with this tag yet.</p>
+    {% else %}
+      <p>No posts yet. Head to the <a href="{% url 'admin:index' %}">admin</a> to write your first one.</p>
+    {% endif %}
+  {% endfor %}
+
+  {% include "blog/_pagination.html" %}
+{% endblock %}

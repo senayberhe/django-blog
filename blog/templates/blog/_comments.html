@@ -1,0 +1,33 @@
+<section class="comments" id="comments">
+  <h2>{{ comments|length }} comment{{ comments|length|pluralize }}</h2>
+
+  {% for comment in comments %}
+    <div class="comment">
+      <p class="meta"><strong>{{ comment.name }}</strong> · {{ comment.created_at|date:"M j, Y" }}</p>
+      {{ comment.body|linebreaks }}
+    </div>
+  {% empty %}
+    <p class="meta">No comments yet. Be the first!</p>
+  {% endfor %}
+
+  <h3>Leave a comment</h3>
+  <form method="post" action="{{ post.get_absolute_url }}#comment-form" id="comment-form" class="comment-form" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {% for field in form %}
+      {% if field.name == "website" %}
+        <div class="hp" aria-hidden="true">{{ field.label_tag }} {{ field }}</div>
+      {% else %}
+        <div class="field{% if field.errors %} has-error{% endif %}">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.help_text %}<small class="help">{{ field.help_text }}</small>{% endif %}
+          {{ field.errors }}
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    <button type="submit">Post comment</button>
+  </form>
+</section>

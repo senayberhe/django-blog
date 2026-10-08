@@ -1,0 +1,17 @@
+{% load markdown_extras %}
+<article class="post-card">
+  {% if post.cover_image %}
+    <a href="{{ post.get_absolute_url }}">
+      <img class="cover" src="{{ post.cover_image.url }}" alt="{{ post.cover_alt }}" loading="lazy">
+    </a>
+  {% endif %}
+  <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+  <p class="meta">{{ post.published_at|date:"F j, Y" }} · {{ post.author.get_full_name|default:post.author.username }}</p>
+  {% if post.excerpt %}
+    <p>{{ post.excerpt }}</p>
+  {% else %}
+    <p>{{ post.body|markdown|striptags|truncatewords:40 }}</p>
+  {% endif %}
+  {% include "blog/_tag_list.html" with tags=post.tags.all %}
+  <a class="read-more" href="{{ post.get_absolute_url }}">Read more →</a>
+</article>

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load markdown_extras %}
+
+{% block title %}{{ post.title }} · {{ BLOG_TITLE }}{% endblock %}
+{% block description %}{% if post.excerpt %}{{ post.excerpt }}{% else %}{{ post.body|markdown|striptags|truncatewords:30 }}{% endif %}{% endblock %}
+
+{% block content %}
+  <article class="post">
+    {% if post.cover_image %}
+      <img class="cover cover-hero" src="{{ post.cover_image.url }}" alt="{{ post.cover_alt }}">
+    {% endif %}
+    <h1>{{ post.title }}</h1>
+    <p class="meta">{{ post.published_at|date:"F j, Y" }} · {{ post.author.get_full_name|default:post.author.username }}</p>
+    {% include "blog/_tag_list.html" with tags=post.tags.all %}
+    <div class="post-body">{{ post.body|markdown }}</div>
+  </article>
+
+  {% include "blog/_comments.html" %}
+
+  {% if related_posts %}
+    <aside class="related">
+      <h2>Related posts</h2>
+      <ul>
+        {% for related in related_posts %}
+          <li>
+            <a href="{{ related.get_absolute_url }}">{{ related.title }}</a>
+            <span class="meta">{{ related.published_at|date:"M j, Y" }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </aside>
+  {% endif %}
+  <p><a href="{% url 'blog:post_list' %}">← Back to all posts</a></p>
+{% endblock %}

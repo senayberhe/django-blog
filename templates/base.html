@@ -1,0 +1,36 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ BLOG_TITLE }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ BLOG_DESCRIPTION }}{% endblock %}">
+  <link rel="alternate" type="application/rss+xml" title="{{ BLOG_TITLE }}" href="{% url 'blog:post_feed' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/code.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-title" href="{% url 'blog:post_list' %}">{{ BLOG_TITLE }}</a>
+    <nav>
+      <form class="search-form" action="{% url 'blog:search' %}" method="get" role="search">
+        <input type="search" name="q" value="{{ query|default:'' }}" placeholder="Search…" aria-label="Search posts">
+      </form>
+      <a href="{% url 'blog:post_list' %}">Home</a>
+      <a href="{% url 'blog:post_feed' %}" title="RSS feed">RSS</a>
+      {% if user.is_staff %}<a href="{% url 'admin:index' %}">Write</a>{% endif %}
+    </nav>
+  </header>
+
+  <main class="container">
+    {% for message in messages %}
+      <div class="flash flash-{{ message.tags }}" role="status">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; {% now "Y" %} {{ BLOG_TITLE }} · <a href="{% url 'blog:post_feed' %}">RSS</a></p>
+  </footer>
+</body>
+</html>
