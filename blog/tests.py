@@ -1,11 +1,13 @@
 import shutil
 import tempfile
 from datetime import timedelta
-from io import BytesIO
+from io import BytesIO, StringIO
+from pathlib import Path
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.management import call_command
 from django.forms import modelform_factory
 from django.test import Client, TestCase, override_settings
 from django.utils import timezone
@@ -276,6 +278,12 @@ class MediaTests(TestCase):
         )
         self.assertTrue(video.is_video)
         self.assertEqual(video.markdown, f"![Clip]({video.file.url})")
+
+    def test_check_storage_command(self):
+        out = StringIO()
+        call_command("check_storage", stdout=out)
+        self.assertIn("Media storage is working.", out.getvalue())
+        self.assertFalse(list(Path(TEMP_MEDIA, "storage-check").glob("*")))  # cleaned up
 
     def test_oversized_image_is_rejected(self):
         big = SimpleUploadedFile("big.png", b"0" * (MAX_IMAGE_MB * 1024 * 1024 + 1))
