@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Page not found · {{ BLOG_TITLE }}{% endblock %}
+
+{% block content %}
+  <div class="error-page">
+    <h1>404</h1>
+    <p>This page doesn't exist — maybe it moved, or the link has a typo.</p>
+    <form action="{% url 'blog:search' %}" method="get" class="search-form">
+      <input type="search" name="q" placeholder="Search posts…" aria-label="Search posts">
+    </form>
+    <p><a href="{% url 'blog:post_list' %}">← Back to the home page</a></p>
+  </div>
+{% endblock %}

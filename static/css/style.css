@@ -218,3 +218,9 @@ a:hover { text-decoration: underline; }
   font-size: .85rem;
   border-top: 1px solid var(--border);
 }
+
+/* --- Error pages --- */
+.error-page { text-align: center; padding-block: 3rem; }
+.error-page h1 { font-size: 4rem; margin: 0; color: var(--accent); }
+.error-page .search-form { margin: 1.5rem 0; }
+.error-page .search-form input { width: 16rem; max-width: 100%; }

@@ -48,6 +48,11 @@ class PostViewTests(TestCase):
         response = self.client.get(self.draft.get_absolute_url())
         self.assertEqual(response.status_code, 404)
 
+    def test_custom_404_page(self):
+        response = self.client.get("/post/no-such-post/")
+        self.assertTemplateUsed(response, "404.html")
+        self.assertContains(response, "This page doesn", status_code=404)
+
 
 class TagTests(TestCase):
     @classmethod
